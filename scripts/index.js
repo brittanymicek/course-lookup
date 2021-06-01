@@ -87,13 +87,17 @@ let data = [
 window.onload = function () {
     loadTitlesDropdown();
 
+    const showDetailsBtn = document.getElementById("showBtn");
+    showDetailsBtn.onclick = showDetailsBtnClicked;
+
 }
 
 function loadTitlesDropdown() {
     const titlesDropdown = document.getElementById("titlesDropdown");
 
-    // create <option value="">Select One...</option>
+    // create <option value="">Select One...</option> as first option
     let selectOneOption = new Option("select one...", "");
+    //let selectOneOption = document.createElement("option");
     titlesDropdown.appendChild(selectOneOption);
 
 
@@ -107,4 +111,44 @@ function loadTitlesDropdown() {
         // add that option to the <select> element
         titlesDropdown.appendChild(theOption);
     }
+}
+
+
+function showDetailsBtnClicked() {
+    // find where the data will show on the apge
+    const courseIdPara = document.getElementById("courseIdPara");
+    const titlePara = document.getElementById("titlePara");
+    const startDatePara = document.getElementById("startDatePara");
+    const feePara = document.getElementById("feePara");
+
+    // ADD THIS TO CLEAR ANY PREVIOUS DESCRIPTION JUST IN CASE THERE IS AN ERROR
+    courseIdPara.innerHTML = "";
+    titlePara.innerHTML = "";
+    startDatePara.innerHTML = "";
+    feePara.innerHTML = "";
+
+    // get the (value of) hike selected from the dropdown list
+    const titlesDropdown = document.getElementById("titlesDropdown");
+    let selectedId = titlesDropdown.value;
+
+    // ADD TO TEST TO SEE IF THE USER SELECTED "SELECTED ONE..." BEFORE THEY CLICKED THE BUTTON
+    // testing to see if the user has selected "Selected one..."
+    if (selectedId == "") {
+        alert("Please select a course first");
+        return;
+    }
+
+    // go find that hike in the array of hiking data (we will match by the id of the hike
+    // that was in the VALUE of the selected dropdown - the description of the hike was
+    // the text of the dropdown selection)
+    let matchingTitle = data.find(arrayElement => arrayElement.CourseId == selectedId);
+
+    // display the specific matching hiking data below the button in the details area
+    courseIdPara.innerHTML = matchingTitle.CourseId; // show description in one para
+    titlePara.innerHTML = "Title: " + matchingTitle.Title; // show hike length in the other paragraph
+    startDatePara.innerHTML = matchingTitle.StartDate;
+    feePara.innerHTML = matchingTitle.Fee;
+    // // display the specific matching hiking data below the button in the details area 
+    // descriptionPara.innerHTML = matchingHike.description;
+    // lengthPara.innerHTML = "Length: " + matchingHike.length;
 }
